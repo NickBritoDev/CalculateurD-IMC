@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Text, TextInput, View, TouchableOpacity, Vibration, Pressable, Keyboard } from 'react-native'
+import { Text, TextInput, View, TouchableOpacity, Pressable, Keyboard } from 'react-native'
 import ResultForm from './resultForm'
 import styles from './style'
 
-export default function Form() {
+export default function Form () {
   const [height, setHeight] = useState(null)
   const [weight, setWeight] = useState(null)
   const [messageResult, setMessageResult] = useState('Preencha o peso e altura.')
@@ -12,43 +12,43 @@ export default function Form() {
   const [heightError, setHeightError] = useState(null)
   const [weightError, setWeightError] = useState(null)
 
-  function validation() {
+  function validation () {
     if (weight !== null && height !== null) {
-      let heightFormat = height.replace(',', '.')
-      const calculatedImc = (weight / (heightFormat * heightFormat)).toFixed(2);
-      setImc(calculatedImc);
-      setHeight(null);
-      setWeight(null);
-      setMessageResult('Seu IMC é igual:');
-      setTextButton('Calcular Novamente');
-      setHeightError(null);
-      setWeightError(null);
+      const heightFormat = height.replace(',', '.')
+      const calculatedImc = (weight / (heightFormat * heightFormat)).toFixed(2)
+      setImc(calculatedImc)
+      setHeight(null)
+      setWeight(null)
+      setMessageResult('Seu IMC é igual:')
+      setTextButton('Calcular Novamente')
+      setHeightError(null)
+      setWeightError(null)
     } else {
-      setImc(null);
-      setTextButton('Calcular');
-      setMessageResult('Preencha o peso e altura.');
-      verificationInput();
+      setImc(null)
+      setTextButton('Calcular')
+      setMessageResult('Preencha o peso e altura.')
+      verificationInput()
     }
   }
 
-  function verificationInput() {
+  function verificationInput () {
     if (weight === null) {
-      setWeightError('Peso obrigatório.*');
+      setWeightError('Peso obrigatório.*')
     } else {
-      setWeightError(null);
+      setWeightError(null)
     }
 
     if (height === null) {
-      setHeightError('Altura obrigatória.*');
+      setHeightError('Altura obrigatória.*')
     } else {
-      setHeightError(null);
+      setHeightError(null)
     }
   }
 
   return (
     <View style={styles.formContext}>
-      {imc === null ?
-        <Pressable onPress={Keyboard.dismiss} style={styles.form}>
+      {imc === null
+        ? <Pressable onPress={Keyboard.dismiss} style={styles.form}>
           <Text style={styles.formLabel}>Altura</Text>
           <Text style={styles.errorMessage}>{heightError}</Text>
           <TextInput
@@ -71,15 +71,13 @@ export default function Form() {
             <Text style={styles.formButtonText}> {textButton}</Text>
           </TouchableOpacity>
         </Pressable>
-        :
-        <>
+        : <>
           <TouchableOpacity style={styles.formButton} onPress={validation}>
             <Text style={styles.formButtonText}> {textButton}</Text>
           </TouchableOpacity>
-          <ResultForm messageResult={messageResult} imc={imc} />
+          <ResultForm messageResult={messageResult} imc={parseFloat(imc)} />
         </>
       }
     </View>
   )
 }
-
