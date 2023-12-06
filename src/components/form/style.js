@@ -50,6 +50,19 @@ const styles = StyleSheet.create({
     height: 'auto',
     marginTop: 30,
     padding: 10
+  },
+  listImcs: {
+    marginBottom: 20
+  },
+  textResultItemList: {
+    fontSize: 14,
+    height: 30,
+    width: '100%',
+    display: 'flex'
+  },
+  textResultItemListInfo: {
+    fontSize: 16,
+    color: 'gray'
   }
 })
 

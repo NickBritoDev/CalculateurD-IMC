@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, TextInput, View, TouchableOpacity, Pressable, Keyboard } from 'react-native'
+import { Text, TextInput, View, TouchableOpacity, Pressable, Keyboard, FlatList } from 'react-native'
 import ResultForm from './resultForm'
 import styles from './style'
 
@@ -11,11 +11,15 @@ export default function Form () {
   const [textButton, setTextButton] = useState('Calcular')
   const [heightError, setHeightError] = useState(null)
   const [weightError, setWeightError] = useState(null)
+  const [imcList, setImcList] = useState([])
+  const dataHora = new Date().toLocaleString()
 
   function validation () {
     if (weight !== null && height !== null) {
       const heightFormat = height.replace(',', '.')
       const calculatedImc = (weight / (heightFormat * heightFormat)).toFixed(2)
+
+      setImcList((arr) => [...arr, { id: new Date().getTime(), imc: calculatedImc, data: dataHora }])
       setImc(calculatedImc)
       setHeight(null)
       setWeight(null)
@@ -53,7 +57,7 @@ export default function Form () {
           <Text style={styles.errorMessage}>{heightError}</Text>
           <TextInput
             style={styles.formInput}
-            placeholder='EX: 1.75'
+            placeholder='EX: 1.95'
             onChangeText={setHeight}
             value={height}
             keyboardType='numeric'
@@ -78,6 +82,25 @@ export default function Form () {
           <ResultForm messageResult={messageResult} imc={parseFloat(imc)} />
         </>
       }
+      <FlatList
+        style={styles.listImcs}
+        data={imcList.reverse()}
+        renderItem={({ item }) => {
+          return (
+            <View key={item.id} style={styles.resultImcItem}>
+              <View>
+                <Text style={styles.textResultItemListInfo}>Data do Calculo:</Text>
+                <Text>{item.data}</Text>
+                <Text style={styles.textResultItemList}>Resultado IMC Atual = {item.imc}</Text>
+              </View>
+            </View>
+          )
+        }}
+        keyExtractor={(item) => {
+          return item.id.toString()
+        }}
+      />
+
     </View>
   )
 }
